@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modal Verbs Mission – 6th Grade</title>
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --accent: #06b6d4;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --error: #dc2626;
+      --error-bg: #fee2e2;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 5rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, #3730a3, #4f46e5);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Scoreboard Tracker */
+    .tracker-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--border);
+      padding: 0.75rem 1rem;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .tracker-content {
+      max-width: 850px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #06b6d4);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .score-box {
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 850px;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Mission Cards */
+    .mission-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+
+    .mission-header {
+      background: #f1f5f9;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mission-header h2 {
+      font-size: 1.15rem;
+      color: #1e293b;
+    }
+
+    .mission-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .mission-body {
+      padding: 1.25rem;
+    }
+
+    .hint-box {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 0.75rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      color: #15803d;
+      margin-bottom: 1.25rem;
+    }
+
+    .activity-row {
+      padding: 1rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .item-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    /* Button Pill Options */
+    .pills-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .pill-btn {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn:hover:not(:disabled) {
+      background: #eef2ff;
+      border-color: #6366f1;
+    }
+
+    .pill-btn.correct {
+      background: var(--success) !important;
+      color: white !important;
+      border-color: var(--success) !important;
+    }
+
+    .pill-btn.wrong {
+      background: var(--error) !important;
+      color: white !important;
+      border-color: var(--error) !important;
+    }
+
+    .pill-btn:disabled {
+      cursor: default;
+    }
+
+    /* Interactive Inputs & Word Builder */
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .text-input {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Word Tile Builder (Scrambled Questions) */
+    .scramble-pool, .scramble-target {
+      min-height: 44px;
+      background: #f8fafc;
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+
+    .scramble-target {
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+    }
+
+    .word-tile {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .word-tile:hover {
+      background: #c7d2fe;
+    }
+
+    .feedback {
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct { color: var(--success); }
+    .feedback.wrong { color: var(--error); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Modal Verbs Challenge</h1>
+    <p>Student: Antonio &bull; 6th Grade Practice</p>
+  </header>
+
+  <div class="tracker-bar">
+    <div class="tracker-content">
+      <div class="progress-track">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div id="scoreBadge" class="score-box">0 / 30 Points</div>
+    </div>
+  </div>
+
+  <main>
+    <!-- STEP 0: Meaning Detector Game -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>Warm-Up: Identify the Meaning</h2>
+        <span class="mission-tag">Concept Match</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Combine what each modal expresses before diving into the sentences!
+        </div>
+        <div id="warmupList"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: Complete Sentences -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>1. Complete the Sentences</h2>
+        <span class="mission-tag">Pill Choice</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Choose between <strong>can, can't, must, mustn't, should</strong> or <strong>shouldn't</strong>.
+        </div>
+        <div id="sec1List"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Choose the Correct Option -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>2. Choose the Correct Form</h2>
+        <span class="mission-tag">Grammar Rules</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Remember: Modals never take "-s" and are directly followed by the base verb (no "to").
+        </div>
+        <div id="sec2List"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Rewrite the Sentences -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>3. Rewrite the Sentences</h2>
+        <span class="mission-tag">Sentence Building</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Rewrite the sentence using the modal verb provided in parentheses.
+        </div>
+        <div id="sec3List"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Make Questions -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>4. Make Questions (Order the Tiles)</h2>
+        <span class="mission-tag">Question Order</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Click the word tiles to build the question in the correct order!
+        </div>
+        <div id="sec4List"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Correct the Mistakes -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>5. Find & Fix the Mistake</h2>
+        <span class="mission-tag">Error Hunter</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Each sentence has ONE mistake. Type the full sentence correctly.
+        </div>
+        <div id="sec5List"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Dialogue -->
+    <section class="mission-card">
+      <div class="mission-header">
+        <h2>6. Complete the Dialogue</h2>
+        <span class="mission-tag">Context Flow</span>
+      </div>
+      <div class="mission-body">
+        <div class="hint-box">
+          Choose the best modal verb to complete Lucas and Pedro's conversation.
+        </div>
+        <div id="sec6List"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let totalScore = 0;
+    const maxScore = 31;
+
+    function addScore() {
+      totalScore++;
+      const fill = document.getElementById("progressFill");
+      const badge = document.getElementById("scoreBadge");
+      const pct = Math.min(100, Math.round((totalScore / maxScore) * 100));
+      fill.style.width = pct + "%";
+      badge.textContent = `${totalScore} / ${maxScore} Points`;
+    }
+
+    // --- WARM UP DATA ---
+    const warmupData = [
+      { prompt: "Which modal verb expresses an OBLIGATION or strong necessity?", options: ["Can", "Must", "Should"], answer: 1 },
+      { prompt: "Which modal verb expresses ADVICE (a good idea)?", options: ["Should", "Mustn't", "Can"], answer: 0 },
+      { prompt: "Which modal verb expresses PROHIBITION (forbidden)?", options: ["Shouldn't", "Can't", "Mustn't"], answer: 2 },
+      { prompt: "Which modal verb expresses ABILITY (knowing how to do something)?", options: ["Can", "Must", "Should"], answer: 0 }
+    ];
+
+    // --- SECTION 1 DATA ---
+    const sec1Data = [
+      { prompt: "1. You __________ study for your English exam.", options: ["should", "can't", "mustn't"], answer: 0, exp: "'Should' is used to offer advice for your exam." },
+      { prompt: "2. Fish __________ swim, but they __________ walk.", options: ["can / can't", "must / mustn't", "should / shouldn't"], answer: 0, exp: "'Can / can't' express ability." },
+      { prompt: "3. You __________ use your cellphone during the exam.", options: ["can", "mustn't", "should"], answer: 1, exp: "'Mustn't' indicates a strict rule / prohibition." },
+      { prompt: "4. It's very cold. You __________ wear a jacket.", options: ["can't", "should", "mustn't"], answer: 1, exp: "'Should' is recommended advice." },
+      { prompt: "5. Students __________ be quiet in the library.", options: ["can", "must", "shouldn't"], answer: 1, exp: "'Must' is a necessary rule in the library." },
+      { prompt: "6. You __________ eat too much candy. It's not healthy.", options: ["shouldn't", "can", "must"], answer: 0, exp: "'Shouldn't' is negative advice." },
+      { prompt: "7. My little sister is only three. She __________ drive a car.", options: ["can", "must", "can't"], answer: 2, exp: "She has no ability/permission: 'can't'." },
+      { prompt: "8. I __________ play the guitar, but I can't play the piano.", options: ["can", "must", "shouldn't"], answer: 0, exp: "'Can' expresses ability." }
+    ];
+
+    // --- SECTION 2 DATA ---
+    const sec2Data = [
+      { prompt: "1. My brother (can / cans) play basketball.", options: ["can", "cans"], answer: 0, exp: "Modals never add -s." },
+      { prompt: "2. You (mustn't / don't must) run in the classroom.", options: ["mustn't", "don't must"], answer: 0, exp: "'Don't must' does not exist in English." },
+      { prompt: "3. She (should / should to) drink more water.", options: ["should", "should to"], answer: 0, exp: "Never add 'to' after modal verbs." },
+      { prompt: "4. We (can't / mustn't) fly like birds.", options: ["can't", "mustn't"], answer: 0, exp: "Flying like a bird is a matter of natural ability (can't)." },
+      { prompt: "5. He (shouldn't / shouldn't to) stay up late.", options: ["shouldn't", "shouldn't to"], answer: 0, exp: "No 'to' after modal verbs." },
+      { prompt: "6. (Can / Does can) you speak English?", options: ["Can", "Does can"], answer: 0, exp: "Modals form questions without do/does." },
+      { prompt: "7. Students (must / musts) do their homework.", options: ["must", "musts"], answer: 0, exp: "Modals never take -s." },
+      { prompt: "8. You (mustn't / don't have) touch that machine.", options: ["mustn't", "don't have"], answer: 0, exp: "'Mustn't' expresses prohibition." }
+    ];
+
+    // --- SECTION 3 DATA ---
+    const sec3Data = [
+      { prompt: "1. It is necessary to wear a uniform at school. (must)", target: "you must wear a uniform at school" },
+      { prompt: "2. It is not a good idea to eat too much fast food. (shouldn't)", target: "you shouldn't eat too much fast food" },
+      { prompt: "3. I know how to swim. (can)", target: "i can swim" },
+      { prompt: "4. It is prohibited to use phones during the test. (mustn't)", target: "you mustn't use phones during the test" },
+      { prompt: "5. It is a good idea to study every day. (should)", target: "you should study every day" }
+    ];
+
+    // --- SECTION 4 DATA ---
+    const sec4Data = [
+      { prompt: "Question 1:", words: ["you", "can", "dance", "?"], correct: "can you dance ?" },
+      { prompt: "Question 2:", words: ["should", "what", "I", "do", "?"], correct: "what should i do ?" },
+      { prompt: "Question 3:", words: ["we", "must", "wear", "uniforms", "?"], correct: "must we wear uniforms ?" },
+      { prompt: "Question 4:", words: ["your brother", "can", "cook", "?"], correct: "can your brother cook ?" },
+      { prompt: "Question 5:", words: ["students", "must", "arrive", "early", "?"], correct: "must students arrive early ?" }
+    ];
+
+    // --- SECTION 5 DATA ---
+    const sec5Data = [
+      { original: "1. She can plays the piano.", target: "she can play the piano", tip: "Remove the -s from 'plays'." },
+      { original: "2. He must to study today.", target: "he must study today", tip: "Remove 'to' after 'must'." },
+      { original: "3. You shouldn't eats so much candy.", target: "you shouldn't eat so much candy", tip: "Use the base verb 'eat'." },
+      { original: "4. Can she speaks English?", target: "can she speak english?", tip: "Use base verb 'speak'." },
+      { original: "5. My parents cans drive.", target: "my parents can drive", tip: "'Can' never takes an 's'." }
+    ];
+
+    // --- SECTION 6 DATA ---
+    const sec6Data = [
+      { speaker: "Lucas: I want to learn how to play soccer. What ______ I do?", options: ["should", "mustn't"], answer: 0 },
+      { speaker: "Pedro: You ______ practice every day!", options: ["should", "can't"], answer: 0 },
+      { speaker: "Lucas: ______ you teach me?", options: ["Can", "Mustn't"], answer: 0 },
+      { speaker: "Pedro: Of course! But I ______ play very well. I'm still learning!", options: ["can't", "should"], answer: 0 },
+      { speaker: "Lucas: That's OK! We ______ practice together.", options: ["can", "mustn't"], answer: 0 }
+    ];
+
+    // Render Helpers
+    function renderPills(containerId, dataList) {
+      const container = document.getElementById(containerId);
+      dataList.forEach((item, idx) => {
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML = `
+          <div class="item-label">${item.prompt}</div>
+          <div class="pills-group" id="${containerId}_pills_${idx}">
+            ${item.options.map((opt, oIdx) => `
+              <button class="pill-btn" onclick="checkPill('${containerId}', ${idx}, ${oIdx})">${opt}</button>
+            `).join("")}
+          </div>
+          <div class="feedback" id="${containerId}_fb_${idx}"></div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function checkPill(group, qIdx, selectedIdx) {
+      const data = group === "warmupList" ? warmupData : (group === "sec1List" ? sec1Data : sec2Data);
+      const item = data[qIdx];
+      const pills = document.querySelectorAll(`#${group}_pills_${qIdx} .pill-btn`);
+      const fb = document.getElementById(`${group}_fb_${qIdx}`);
+
+      pills.forEach(btn => btn.disabled = true);
+
+      if (selectedIdx === item.answer) {
+        pills[selectedIdx].classList.add("correct");
+        fb.className = "feedback show correct";
+        fb.textContent = item.exp ? `✓ Correct! ${item.exp}` : `✓ Correct!`;
+        addScore();
+      } else {
+        pills[selectedIdx].classList.add("wrong");
+        pills[item.answer].classList.add("correct");
+        fb.className = "feedback show wrong";
+        fb.textContent = item.exp ? `✗ Not quite. ${item.exp}` : `✗ Incorrect.`;
+      }
+    }
+
+    function renderSec3() {
+      const container = document.getElementById("sec3List");
+      sec3Data.forEach((item, idx) => {
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML = `
+          <div class="item-label">${item.prompt}</div>
+          <div class="input-row">
+            <input type="text" class="text-input" id="sec3_in_${idx}" placeholder="Type the complete sentence here..." />
+            <button class="btn-action" onclick="checkRewrite(${idx})">Check</button>
+          </div>
+          <div class="feedback" id="sec3_fb_${idx}"></div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function normalize(str) {
+      return str.toLowerCase().replace(/[.,!]/g, "").replace(/\s+/g, " ").trim();
+    }
+
+    function checkRewrite(idx) {
+      const input = document.getElementById(`sec3_in_${idx}`);
+      const fb = document.getElementById(`sec3_fb_${idx}`);
+      const cleanUser = normalize(input.value);
+      const cleanTarget = normalize(sec3Data[idx].target);
+
+      if (cleanUser === cleanTarget) {
+        fb.className = "feedback show correct";
+        fb.textContent = "✓ Great sentence formulation!";
+        input.disabled = true;
+        addScore();
+      } else {
+        fb.className = "feedback show wrong";
+        fb.textContent = `Hint: Try something like: "${sec3Data[idx].target.charAt(0).toUpperCase() + sec3Data[idx].target.slice(1)}."`;
+      }
+    }
+
+    function renderSec4() {
+      const container = document.getElementById("sec4List");
+      sec4Data.forEach((item, qIdx) => {
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML = `
+          <div class="item-label">${item.prompt}</div>
+          <div class="scramble-target" id="sec4_target_${qIdx}"></div>
+          <div class="scramble-pool" id="sec4_pool_${qIdx}">
+            ${item.words.map((w, wIdx) => `
+              <span class="word-tile" id="tile_${qIdx}_${wIdx}" onclick="moveTile(${qIdx}, ${wIdx}, '${w}')">${w}</span>
+            `).join("")}
+          </div>
+          <button class="btn-action" onclick="checkOrder(${qIdx})">Verify Order</button>
+          <div class="feedback" id="sec4_fb_${qIdx}"></div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function moveTile(qIdx, wIdx, word) {
+      const tile = document.getElementById(`tile_${qIdx}_${wIdx}`);
+      const target = document.getElementById(`sec4_target_${qIdx}`);
+      const pool = document.getElementById(`sec4_pool_${qIdx}`);
+
+      if (tile.parentElement === pool) {
+        target.appendChild(tile);
+      } else {
+        pool.appendChild(tile);
+      }
+    }
+
+    function checkOrder(qIdx) {
+      const target = document.getElementById(`sec4_target_${qIdx}`);
+      const fb = document.getElementById(`sec4_fb_${qIdx}`);
+      const tiles = target.querySelectorAll(".word-tile");
+      const sentence = Array.from(tiles).map(t => t.textContent).join(" ");
+
+      if (normalize(sentence) === normalize(sec4Data[qIdx].correct)) {
+        fb.className = "feedback show correct";
+        fb.textContent = "✓ Perfect question structure!";
+        addScore();
+      } else {
+        fb.className = "feedback show wrong";
+        fb.textContent = "✗ Keep trying! Modals go at the start of basic questions or right after 'Wh-' words.";
+      }
+    }
+
+    function renderSec5() {
+      const container = document.getElementById("sec5List");
+      sec5Data.forEach((item, idx) => {
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML = `
+          <div class="item-label">${item.original}</div>
+          <div class="input-row">
+            <input type="text" class="text-input" id="sec5_in_${idx}" placeholder="Write the corrected sentence..." />
+            <button class="btn-action" onclick="checkCorrection(${idx})">Fix</button>
+          </div>
+          <div class="feedback" id="sec5_fb_${idx}"></div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function checkCorrection(idx) {
+      const input = document.getElementById(`sec5_in_${idx}`);
+      const fb = document.getElementById(`sec5_fb_${idx}`);
+      const cleanUser = normalize(input.value);
+      const cleanTarget = normalize(sec5Data[idx].target);
+
+      if (cleanUser === cleanTarget) {
+        fb.className = "feedback show correct";
+        fb.textContent = "✓ Error spotted and corrected successfully!";
+        input.disabled = true;
+        addScore();
+      } else {
+        fb.className = "feedback show wrong";
+        fb.textContent = `Tip: ${sec5Data[idx].tip}`;
+      }
+    }
+
+    function renderSec6() {
+      const container = document.getElementById("sec6List");
+      sec6Data.forEach((item, idx) => {
+        const row = document.createElement("div");
+        row.className = "activity-row";
+        row.innerHTML = `
+          <div class="item-label">${item.speaker}</div>
+          <div class="pills-group" id="sec6_pills_${idx}">
+            ${item.options.map((opt, oIdx) => `
+              <button class="pill-btn" onclick="checkDialogue(${idx}, ${oIdx})">${opt}</button>
+            `).join("")}
+          </div>
+          <div class="feedback" id="sec6_fb_${idx}"></div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function checkDialogue(qIdx, selectedIdx) {
+      const item = sec6Data[qIdx];
+      const pills = document.querySelectorAll(`#sec6_pills_${qIdx} .pill-btn`);
+      const fb = document.getElementById(`sec6_fb_${qIdx}`);
+
+      pills.forEach(btn => btn.disabled = true);
+
+      if (selectedIdx === item.answer) {
+        pills[selectedIdx].classList.add("correct");
+        fb.className = "feedback show correct";
+        fb.textContent = "✓ Fits the dialogue context!";
+        addScore();
+      } else {
+        pills[selectedIdx].classList.add("wrong");
+        pills[item.answer].classList.add("correct");
+        fb.className = "feedback show wrong";
+        fb.textContent = "✗ Check the meaning in the dialogue flow.";
+      }
+    }
+
+    // Initialize all sections
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPills("warmupList", warmupData);
+      renderPills("sec1List", sec1Data);
+      renderPills("sec2List", sec2Data);
+      renderSec3();
+      renderSec4();
+      renderSec5();
+      renderSec6();
+    });
+  </script>
+</body>
+</html>
